@@ -98,13 +98,13 @@ class RecycleGANModel(BaseModel):
         self.schedulers.append(networks.get_scheduler(optimizer, opt))
 
     print('---------- Networks initialized -------------')
-    networks.print_network(self.netG_A)
-    networks.print_network(self.netG_B)
-    networks.print_network(self.netP_A)
-    networks.print_network(self.netP_B)
-    if self.isTrain:
-      networks.print_network(self.netD_A)
-      networks.print_network(self.netD_B)
+    # networks.print_network(self.netG_A)
+    # networks.print_network(self.netG_B)
+    # networks.print_network(self.netP_A)
+    # networks.print_network(self.netP_B)
+    # if self.isTrain:
+    #   networks.print_network(self.netD_A)
+    #   networks.print_network(self.netD_B)
     print('-----------------------------------------------')
 
   def set_input(self, input):
@@ -210,7 +210,7 @@ class RecycleGANModel(BaseModel):
     pred_B = self.fake_B_pool.query(self.pred_B2)
     loss_D_A3 = self.backward_D_basic(self.netD_A, self.real_B2, pred_B)
 
-    self.loss_D_A = loss_D_A0.data[0] + loss_D_A1.data[0] + loss_D_A2.data[0] + loss_D_A3.data[0]
+    self.loss_D_A = loss_D_A0.data.item() + loss_D_A1.data.item() + loss_D_A2.data.item() + loss_D_A3.data.item()
 
   def backward_D_B(self):
     fake_A0 = self.fake_A_pool.query(self.fake_A0)
@@ -225,7 +225,7 @@ class RecycleGANModel(BaseModel):
     pred_A = self.fake_A_pool.query(self.pred_A2)
     loss_D_B3 = self.backward_D_basic(self.netD_B, self.real_A2, pred_A)
 
-    self.loss_D_B = loss_D_B0.data[0] + loss_D_B1.data[0] + loss_D_B2.data[0] + loss_D_B3.data[0]
+    self.loss_D_B = loss_D_B0.data.item() + loss_D_B1.data.item() + loss_D_B2.data.item() + loss_D_B3.data.item()
 
   def backward_G(self):
     lambda_idt = self.opt.identity
@@ -330,16 +330,16 @@ class RecycleGANModel(BaseModel):
     self.rec_A = rec_A.data
     self.rec_B = rec_B.data
 
-    self.loss_G_A = loss_G_A0.data[0] + loss_G_A1.data[0] + loss_G_A2.data[0]
-    self.loss_G_B = loss_G_B0.data[0] + loss_G_B1.data[0] + loss_G_B2.data[0]
-    self.loss_cycle_A = loss_cycle_A.data[0]
-    self.loss_cycle_B = loss_cycle_B.data[0]
-    self.loss_pred_A = loss_pred_A.data[0]
-    self.loss_pred_B = loss_pred_B.data[0]
+    self.loss_G_A = loss_G_A0.data.item() + loss_G_A1.data.item() + loss_G_A2.data.item()
+    self.loss_G_B = loss_G_B0.data.item() + loss_G_B1.data.item() + loss_G_B2.data.item()
+    self.loss_cycle_A = loss_cycle_A.data.item()
+    self.loss_cycle_B = loss_cycle_B.data.item()
+    self.loss_pred_A = loss_pred_A.data.item()
+    self.loss_pred_B = loss_pred_B.data.item()
 
     if self.adversarial_loss_p:
-      self.loss_pred_A_adversarial = loss_pred_A_adversarial.data[0]
-      self.loss_pred_B_adversarial = loss_pred_B_adversarial.data[0]
+      self.loss_pred_A_adversarial = loss_pred_A_adversarial.data.item()
+      self.loss_pred_B_adversarial = loss_pred_B_adversarial.data.item()
 
   def optimize_parameters(self):
     # forward

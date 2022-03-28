@@ -1,3 +1,6 @@
+# cpu args
+# --dataroot ./flowers/01/ --name test --model recycle_gan  --which_model_netG resnet_6blocks --which_model_netP unet_256 --dataset_mode unaligned_triplet --no_dropout --gpu 0 --gpu_ids -1 --identity 0 --pool_size 0 --nThreads 0
+# python -m visdom.server
 import time
 from options.train_options import TrainOptions
 from data.data_loader import CreateDataLoader
@@ -15,10 +18,12 @@ visualizer = Visualizer(opt)
 total_steps = 0
 
 for epoch in range(opt.epoch_count, opt.niter + opt.niter_decay + 1):
+    # print(f'Epoch: {epoch}')
     epoch_start_time = time.time()
     epoch_iter = 0
 
     for i, data in enumerate(dataset):
+        # print(f'Batch: {i}')
         iter_start_time = time.time()
         visualizer.reset()
         total_steps += opt.batchSize
