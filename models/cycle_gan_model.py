@@ -69,13 +69,13 @@ class CycleGANModel(BaseModel):
             for optimizer in self.optimizers:
                 self.schedulers.append(networks.get_scheduler(optimizer, opt))
 
-        print('---------- Networks initialized -------------')
-        networks.print_network(self.netG_A)
-        networks.print_network(self.netG_B)
-        if self.isTrain:
-            networks.print_network(self.netD_A)
-            networks.print_network(self.netD_B)
-        print('-----------------------------------------------')
+        # print('---------- Networks initialized -------------')
+        # networks.print_network(self.netG_A)
+        # networks.print_network(self.netG_B)
+        # if self.isTrain:
+        #     networks.print_network(self.netD_A)
+        #     networks.print_network(self.netD_B)
+        # print('-----------------------------------------------')
 
     def set_input(self, input):
         AtoB = self.opt.which_direction == 'AtoB'
@@ -90,12 +90,14 @@ class CycleGANModel(BaseModel):
         self.real_B = Variable(self.input_B)
 
     def test(self):
-        real_A = Variable(self.input_A, volatile=True)
+        with torch.no_grad():
+            real_A = Variable(self.input_A)
         fake_B = self.netG_A(real_A)
         self.rec_A = self.netG_B(fake_B).data
         self.fake_B = fake_B.data
 
-        real_B = Variable(self.input_B, volatile=True)
+        with torch.no_grad():
+            real_B = Variable(self.input_B)
         fake_A = self.netG_B(real_B)
         self.rec_B = self.netG_A(fake_A).data
         self.fake_A = fake_A.data

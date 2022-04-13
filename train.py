@@ -1,6 +1,3 @@
-# cpu args
-# --dataroot ./flowers/01/ --name test --model recycle_gan  --which_model_netG resnet_6blocks --which_model_netP unet_256 --dataset_mode unaligned_triplet --no_dropout --gpu 0 --gpu_ids -1 --identity 0 --pool_size 0 --nThreads 0
-# python -m visdom.server
 import time
 from options.train_options import TrainOptions
 from data.data_loader import CreateDataLoader

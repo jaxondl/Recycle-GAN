@@ -1,6 +1,7 @@
 import torch.utils.data as data
 from PIL import Image
 import torchvision.transforms as transforms
+from torchvision.transforms import InterpolationMode
 
 class BaseDataset(data.Dataset):
     def __init__(self):
@@ -16,7 +17,7 @@ def get_transform(opt):
     transform_list = []
     if opt.resize_or_crop == 'resize_and_crop':
         osize = [opt.loadSize, opt.loadSize]
-        transform_list.append(transforms.Scale(osize, Image.BICUBIC))
+        transform_list.append(transforms.Resize(osize, InterpolationMode.BICUBIC))
         transform_list.append(transforms.RandomCrop(opt.fineSize))
     elif opt.resize_or_crop == 'crop':
         transform_list.append(transforms.RandomCrop(opt.fineSize))

@@ -137,8 +137,9 @@ class RecycleGANModel(BaseModel):
     self.real_B2 = Variable(self.input_B2)
 
   def test(self):
-    real_A0 = Variable(self.input_A0, volatile=True)
-    real_A1 = Variable(self.input_A1, volatile=True)
+    with torch.no_grad():
+      real_A0 = Variable(self.input_A0)
+      real_A1 = Variable(self.input_A1)
 
     fake_B0 = self.netG_A(real_A0)
     fake_B1 = self.netG_A(real_A1)
@@ -153,8 +154,9 @@ class RecycleGANModel(BaseModel):
     self.fake_B1 = fake_B1.data
     self.fake_B2 = fake_B2.data
 
-    real_B0 = Variable(self.input_B0, volatile=True)
-    real_B1 = Variable(self.input_B1, volatile=True)
+    with torch.no_grad():
+      real_B0 = Variable(self.input_B0)
+      real_B1 = Variable(self.input_B1)
 
     fake_A0 = self.netG_B(real_B0)
     fake_A1 = self.netG_B(real_B1)
