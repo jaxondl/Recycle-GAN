@@ -15,9 +15,10 @@ def construct_output(results_dir, name, phase='test', epoch='latest', num_frames
 
     # load banners
     banner_h = 36
-    vid_banner = cv2.imread(os.path.join('banners', 'vid_banner.png'))
+    file_path = os.path.dirname(os.path.realpath(__file__))
+    vid_banner = cv2.imread(os.path.join(file_path, 'banners', 'vid_banner.png'))
     vid_banner = cv2.resize(vid_banner, (3*256, banner_h))
-    img_banner = cv2.imread(os.path.join('banners', 'img_banner.png'))
+    img_banner = cv2.imread(os.path.join(file_path, 'banners', 'img_banner.png'))
     img_banner = cv2.resize(img_banner, (banner_h, 3*256))
 
     # set up objects
