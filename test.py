@@ -5,6 +5,7 @@ from data.data_loader import CreateDataLoader
 from models.models import create_model
 from util.visualizer import Visualizer
 from util import html
+from construct_output import construct_output
 
 if __name__ == '__main__':
     opt = TestOptions().parse()
@@ -33,3 +34,5 @@ if __name__ == '__main__':
         visualizer.save_images(webpage, visuals, img_path)
     
     webpage.save()
+    print('\nConstructing output')
+    construct_output(opt.results_dir, opt.name, opt.phase, opt.which_epoch)

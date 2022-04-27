@@ -15,12 +15,12 @@ visualizer = Visualizer(opt)
 total_steps = 0
 
 for epoch in range(opt.epoch_count, opt.niter + opt.niter_decay + 1):
-    # print(f'Epoch: {epoch}')
+    print(f'Epoch: {epoch}')
     epoch_start_time = time.time()
     epoch_iter = 0
 
     for i, data in enumerate(dataset):
-        # print(f'Batch: {i}')
+        print(f'Batch: {i}')
         iter_start_time = time.time()
         visualizer.reset()
         total_steps += opt.batchSize
