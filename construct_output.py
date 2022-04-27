@@ -19,6 +19,8 @@ def construct_output(results_dir, name, phase='test', epoch='latest', num_frames
     vid_banner = cv2.imread(os.path.join(file_path, 'banners', 'vid_banner.png'))
     vid_banner = cv2.resize(vid_banner, (3*256, banner_h))
     img_banner = cv2.imread(os.path.join(file_path, 'banners', 'img_banner.png'))
+    if img_banner.shape[0] < img_banner.shape[1]:
+      img_banner = np.transpose(img_banner, (1, 0, 2))[::-1,:,:]
     img_banner = cv2.resize(img_banner, (banner_h, 3*256))
 
     # set up objects
