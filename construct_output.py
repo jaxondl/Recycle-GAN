@@ -5,7 +5,7 @@ import cv2
 import matplotlib.pyplot as plt
 
 # function to construct output videos
-def construct_output(results_dir, name, phase='test', epoch='latest', num_frames=6, interval=30):
+def construct_output(results_dir, name, phase='test', epoch='latest', num_frames=6, interval=30, use_banner=False):
     frm_dir = os.path.join(results_dir, name, f'{phase}_{epoch}', 'images')
     vid_dir = os.path.join(results_dir, name, f'{phase}_{epoch}', 'videos')
     if not os.path.exists(vid_dir):
@@ -14,14 +14,17 @@ def construct_output(results_dir, name, phase='test', epoch='latest', num_frames
     print(f'Video directory: {vid_dir}')
 
     # load banners
-    banner_h = 36
-    file_path = os.path.dirname(os.path.realpath(__file__))
-    vid_banner = cv2.imread(os.path.join(file_path, 'banners', 'vid_banner.png'))
-    vid_banner = cv2.resize(vid_banner, (3*256, banner_h))
-    img_banner = cv2.imread(os.path.join(file_path, 'banners', 'img_banner.png'))
-    if img_banner.shape[0] < img_banner.shape[1]:
-      img_banner = np.transpose(img_banner, (1, 0, 2))[::-1,:,:]
-    img_banner = cv2.resize(img_banner, (banner_h, 3*256))
+    if use_banner:
+        banner_h = 36
+        file_path = os.path.dirname(os.path.realpath(__file__))
+        vid_banner = cv2.imread(os.path.join(file_path, 'banners', 'vid_banner.png'))
+        vid_banner = cv2.resize(vid_banner, (3*256, banner_h))
+        img_banner = cv2.imread(os.path.join(file_path, 'banners', 'img_banner.png'))
+        if img_banner.shape[0] < img_banner.shape[1]:
+            img_banner = np.transpose(img_banner, (1, 0, 2))[::-1,:,:]
+        img_banner = cv2.resize(img_banner, (banner_h, 3*256))
+    else:
+        banner_h = 0
 
     # set up objects
     video_writers = {}
@@ -47,7 +50,8 @@ def construct_output(results_dir, name, phase='test', epoch='latest', num_frames
         video_writers[vid_type] = cv2.VideoWriter(os.path.join(vid_dir, f'{prefix}_{vid_type}.mp4'), cv2.VideoWriter_fourcc(*'mp4v'), 30, (256, 256))
     for concat_type in concat_data:
         concat_writers[concat_type] = cv2.VideoWriter(os.path.join(vid_dir, f'{prefix}_{concat_type}.mp4'), cv2.VideoWriter_fourcc(*'mp4v'), 30, (3*256, banner_h + 256))
-        concat_data[concat_type]['image'][:, :banner_h, :] = img_banner
+        if use_banner:
+            concat_data[concat_type]['image'][:, :banner_h, :] = img_banner
 
     # write frames to output videos
     for i, frm_name in enumerate(sorted(os.listdir(frm_dir))):
@@ -71,7 +75,8 @@ def construct_output(results_dir, name, phase='test', epoch='latest', num_frames
                     counters[vid_type] += 1
 
             if concat_data[concat_type]['track'] == 0:
-                concat_data[concat_type]['cur_frame'][:banner_h, :, :] = vid_banner
+                if use_banner:
+                    concat_data[concat_type]['cur_frame'][:banner_h, :, :] = vid_banner
                 concat_writers[concat_type].write(concat_data[concat_type]['cur_frame'])
                 concat_data[concat_type]['cur_frame'] = np.zeros((banner_h + 256, 3*256, 3), dtype=np.uint8)
                 concat_data[concat_type]['track'] = 3
@@ -88,4 +93,8 @@ if __name__ ==  '__main__':
     results_dir = sys.argv[1]
     name = sys.argv[2]
     epoch = sys.argv[3]
-    construct_output(results_dir, name, phase='test', epoch=epoch)
+    if '-b' in sys.argv or '--banner' in sys.argv:
+        use_banner = True
+    else:
+        use_banner = False
+    construct_output(results_dir, name, phase='test', epoch=epoch, use_banner=use_banner)
