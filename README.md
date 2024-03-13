@@ -9,4 +9,4 @@ Contributions:
 
 Our video results can be viewed [here](https://drive.google.com/drive/folders/1R5NYG_pNgINlDnyNb_wm4FlBHYdwRZYC?usp=sharing).
 
-The original reposistory can be found [here](https://github.com/aayushbansal/Recycle-GAN).
+The original repository can be found [here](https://github.com/aayushbansal/Recycle-GAN).
